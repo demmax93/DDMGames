@@ -6,11 +6,9 @@ import com.ddm.test.game.view.GameScreen;
 
 public class MyGameTest extends Game {
 
-	private Screen gameScreen;
-
 	@Override
 	public void create() {
-		gameScreen = new GameScreen();
+		Screen gameScreen = new GameScreen();
 		setScreen(gameScreen);
 	}
 }

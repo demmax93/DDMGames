@@ -10,13 +10,13 @@ import com.badlogic.gdx.math.Polygon;
 
 public abstract class GameObject {
 
-    protected Polygon bounds;
-    protected Sprite object;
-    protected Animation walkAnimation;
-    TextureRegion[] walkFrames;
-    TextureRegion currentFrame;
+    private Polygon bounds;
+    private Sprite object;
+    private Animation<TextureRegion> walkAnimation;
+    private TextureRegion[] walkFrames;
+    private TextureRegion currentFrame;
 
-    float stateTime;
+    private float stateTime;
 
     public GameObject(Texture texture, float x, float y, float width, float height, int frameCols, int frameRows) {
         object = new Sprite();
@@ -36,13 +36,13 @@ public abstract class GameObject {
                 walkFrames[index++] = tmp[i][j];
             }
         }
-        walkAnimation = new Animation(0.05f, walkFrames); //0.025f
+        walkAnimation = new Animation(0.13f, walkFrames); //0.025f
         stateTime = 0f;
     }
 
     public void draw(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
+        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         object.setRegion(currentFrame);
         object.setPosition(bounds.getX(), bounds.getY());
         object.setRotation(bounds.getRotation());

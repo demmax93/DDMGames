@@ -14,8 +14,6 @@ public class PlaneController {
     }
 
     private float planeSpeed, velocity = 10f;
-    private float maxSpeed = 5.0f;
-    private float rotationSpeed = 30f;
 
     public void handler() {
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -27,6 +25,7 @@ public class PlaneController {
 
         planeSpeed = sliceSpeed();
 
+        float rotationSpeed = 30f;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             planeBounds.rotate(rotationSpeed * GameScreen.deltaCff * planeSpeed);
         }
@@ -47,6 +46,7 @@ public class PlaneController {
     }
 
     private float sliceSpeed() {
+        float maxSpeed = 5.0f;
         if(maxSpeed < planeSpeed) {
              return maxSpeed;
         }

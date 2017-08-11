@@ -36,7 +36,7 @@ public abstract class GameObject {
                 walkFrames[index++] = tmp[i][j];
             }
         }
-        walkAnimation = new Animation(0.13f, walkFrames); //0.025f
+        walkAnimation = new Animation(0.05f, walkFrames); //0.025f
         stateTime = 0f;
     }
 

@@ -21,7 +21,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("core/assets/hero_sprites.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        plane = new Plane(texture, 0,0, 1.5f, 1.5f, 12, 1);
+        plane = new Plane(texture, 0,0, 1f, 1f, 1, 39);
     }
 
     @Override

@@ -6,26 +6,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ddm.test.game.model.Animator;
 import com.ddm.test.game.model.Plane;
 
 public class GameScreen implements Screen {
 
     private SpriteBatch batch;
     private Texture texture;
-   // private Plane plane;
+    private Plane plane;
     private OrthographicCamera camera;
-    private Animator hero = new Animator();
     public static float deltaCff;
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-       // texture = new Texture(Gdx.files.internal("core/assets/plane.png"));
-      //  texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-       // plane = new Plane(texture, 0,0, 2f, 2f * (float) texture.getHeight()/texture.getWidth());
-        hero.create();
-
+        texture = new Texture(Gdx.files.internal("core/assets/hero_sprites.png"));
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        plane = new Plane(texture, 0,0, 1.5f, 1.5f, 12, 1);
     }
 
     @Override
@@ -35,8 +31,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-       // plane.draw(batch);
-        hero.render();
+        plane.draw(batch);
         batch.end();
 
     }
@@ -66,7 +61,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-      //  texture.dispose();
+        texture.dispose();
         batch.dispose();
     }
 }

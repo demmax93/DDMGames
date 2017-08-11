@@ -14,7 +14,7 @@ public class PlaneController {
     }
 
     private float planeSpeed, velocity = 10f;
-    private float maxSpeed = 10.0f;
+    private float maxSpeed = 5.0f;
     private float rotationSpeed = 30f;
 
     public void handler() {

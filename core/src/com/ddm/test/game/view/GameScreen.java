@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ddm.test.game.model.Background;
 import com.ddm.test.game.model.Plane;
 
 public class GameScreen implements Screen {
@@ -13,6 +14,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;
     private Plane plane;
+    private Background background;
     private OrthographicCamera camera;
     public static float deltaCff;
 
@@ -22,6 +24,7 @@ public class GameScreen implements Screen {
         texture = new Texture(Gdx.files.internal("core/assets/hero_sprites.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         plane = new Plane(texture, 0,0, 1f, 1.5f, 1, 39);
+        background = new Background();
     }
 
     @Override
@@ -31,8 +34,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        background.draw(batch);
         plane.draw(batch);
         batch.end();
+        camera.position.set(plane.getBounds().getX(), plane.getBounds().getY(), 0);
+        camera.update();
 
     }
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Background {
     private static Texture texture;
     private static Sprite backgroundSprite;
+    
     public Background(){
         texture = new Texture(Gdx.files.internal("core/assets/background.jpeg"));
         backgroundSprite = new Sprite(texture);

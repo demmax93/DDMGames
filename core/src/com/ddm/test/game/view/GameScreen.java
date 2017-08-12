@@ -12,6 +12,8 @@ import com.ddm.test.game.model.Plane;
 
 public class GameScreen implements Screen {
 
+    public static final double TEEWS = 0.04; // opozdanie camery
+
     private SpriteBatch batch;
     private Texture texture;
     private Plane plane;
@@ -38,8 +40,8 @@ public class GameScreen implements Screen {
         background.draw(batch);
         plane.draw(batch);
         batch.end();
-        float x = (float) (camera.position.x +((plane.getBounds().getX() - camera.position.x) * 0.07));
-        float y = (float) (camera.position.y +((plane.getBounds().getY() - camera.position.y) * 0.07));
+        float x = (float) (camera.position.x +((plane.getBounds().getX() - camera.position.x) * TEEWS));
+        float y = (float) (camera.position.y +((plane.getBounds().getY() - camera.position.y) * TEEWS));
         camera.position.set(x,y, 0);
         camera.update();
 

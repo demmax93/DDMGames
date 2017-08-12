@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.ddm.test.game.model.Background;
 import com.ddm.test.game.model.Plane;
 
@@ -37,7 +38,9 @@ public class GameScreen implements Screen {
         background.draw(batch);
         plane.draw(batch);
         batch.end();
-        camera.position.set(plane.getBounds().getX(), plane.getBounds().getY(), 0);
+        float x = (float) (camera.position.x +((plane.getBounds().getX() - camera.position.x) * 0.07));
+        float y = (float) (camera.position.y +((plane.getBounds().getY() - camera.position.y) * 0.07));
+        camera.position.set(x,y, 0);
         camera.update();
 
     }

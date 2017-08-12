@@ -11,7 +11,7 @@ public class Background {
     public Background(){
         texture = new Texture(Gdx.files.internal("core/assets/background.jpeg"));
         backgroundSprite = new Sprite(texture);
-        backgroundSprite.setSize(backgroundSprite.getWidth()/200, backgroundSprite.getHeight()/200);
+        backgroundSprite.setSize(backgroundSprite.getWidth()/100, backgroundSprite.getHeight()/100);
         backgroundSprite.setPosition(-10,-10);
     }
 

@@ -26,7 +26,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("core/assets/hero_sprites.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        plane = new Plane(texture, 3,3, 1f, 1.5f, 1, 39);
+        plane = new Plane(texture, 3,3, texture.getWidth()/100f, texture.getHeight()/5850f, 1, 39);
         backgroundTexture = new Texture(Gdx.files.internal("core/assets/background.jpeg"));
         background = new Background(backgroundTexture, 0, 0, backgroundTexture.getWidth()/200, backgroundTexture.getHeight()/200, 1, 1);
     }
@@ -40,10 +40,9 @@ public class GameScreen implements Screen {
         batch.begin();
         background.draw(batch);
         plane.draw(batch);
+        plane.checkCollision(background);
         batch.end();
         setPositionCamera();
-        camera.update();
-
     }
 
     private void setPositionCamera() {
@@ -58,10 +57,11 @@ public class GameScreen implements Screen {
         if(x > background.getBounds().getOriginX() - camera.viewportWidth/2) {
             x = background.getBounds().getOriginX() - camera.viewportWidth/2;
         }
-        if(y >  background.getBounds().getOriginY() - camera.viewportHeight/2) {
+        if(y > background.getBounds().getOriginY() - camera.viewportHeight/2) {
             y = background.getBounds().getOriginY() - camera.viewportHeight/2;
         }
         camera.position.set(x,y, 0);
+        camera.update();
     }
 
     @Override

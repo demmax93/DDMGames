@@ -26,9 +26,9 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("core/assets/hero_sprites.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        plane = new Plane(texture, 0,0, 1f, 1.5f, 1, 39);
+        plane = new Plane(texture, 3,3, 1f, 1.5f, 1, 39);
         backgroundTexture = new Texture(Gdx.files.internal("core/assets/background.jpeg"));
-        background = new Background(backgroundTexture, -10, -10, backgroundTexture.getWidth()/100, backgroundTexture.getHeight()/100, 1, 1);
+        background = new Background(backgroundTexture, 0, 0, backgroundTexture.getWidth()/200, backgroundTexture.getHeight()/200, 1, 1);
     }
 
     @Override
@@ -41,11 +41,27 @@ public class GameScreen implements Screen {
         background.draw(batch);
         plane.draw(batch);
         batch.end();
-        float x = (float) (camera.position.x +((plane.getBounds().getX() - camera.position.x) * TEEWS));
-        float y = (float) (camera.position.y +((plane.getBounds().getY() - camera.position.y) * TEEWS));
-        camera.position.set(x,y, 0);
+        setPositionCamera();
         camera.update();
 
+    }
+
+    private void setPositionCamera() {
+        float x = (float) (camera.position.x +((plane.getBounds().getX() - camera.position.x) * TEEWS));
+        float y = (float) (camera.position.y +((plane.getBounds().getY() - camera.position.y) * TEEWS));
+        if(x < camera.viewportWidth/2) {
+            x = camera.viewportWidth/2;
+        }
+        if(y <  camera.viewportHeight/2) {
+            y = camera.viewportHeight/2;
+        }
+        if(x > background.getBounds().getOriginX() - camera.viewportWidth/2) {
+            x = background.getBounds().getOriginX() - camera.viewportWidth/2;
+        }
+        if(y >  background.getBounds().getOriginY() - camera.viewportHeight/2) {
+            y = background.getBounds().getOriginY() - camera.viewportHeight/2;
+        }
+        camera.position.set(x,y, 0);
     }
 
     @Override

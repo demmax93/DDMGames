@@ -13,13 +13,12 @@ public class PlaneController {
         this.planeBounds = planeBounds;
     }
 
-    private float planeSpeed, velocity = 10f;
+    private float planeSpeed, velocity = 10.0f;
 
     public void handler() {
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
             planeSpeed += velocity * GameScreen.deltaCff;
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             planeSpeed -= velocity * GameScreen.deltaCff;
         } else downSpeed();
 
@@ -28,10 +27,9 @@ public class PlaneController {
         float rotationSpeed = 30f;
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             planeBounds.rotate(rotationSpeed * GameScreen.deltaCff * planeSpeed);
-        }
-        else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             planeBounds.rotate(-rotationSpeed * GameScreen.deltaCff * planeSpeed);
-        }
+        } else planeBounds.rotate(0.0f);
 
         planeBounds.setPosition(planeBounds.getX() + MathUtils.cosDeg(planeBounds.getRotation() + 90) * planeSpeed * GameScreen.deltaCff,
                 planeBounds.getY() + MathUtils.sinDeg(planeBounds.getRotation() + 90) * planeSpeed * GameScreen.deltaCff);

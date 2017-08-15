@@ -64,7 +64,7 @@ public abstract class GameObject {
         if(x > object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1f) {
             x = object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1f;
         }
-        if(y >  object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1f) {
+        if(y > object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1f) {
             y = object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1f;
         }
         this.getBounds().setPosition(x, y);

@@ -55,17 +55,17 @@ public abstract class GameObject {
     public void checkCollision(GameObject object) {
         float x = this.getBounds().getX();
         float y = this.getBounds().getY();
-        if(x < this.getBounds().getOriginX()/2) {
-            x = this.getBounds().getOriginX()/2;
+        if(x < this.getBounds().getOriginX()/2 + 0.5) {
+            x = this.getBounds().getOriginX()/2 + 0.5f;
         }
-        if(y < this.getBounds().getOriginY()/2) {
-            y = this.getBounds().getOriginY()/2;
+        if(y < this.getBounds().getOriginY()/2 ) {
+            y = this.getBounds().getOriginY()/2 ;
         }
-        if(x > object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1f) {
-            x = object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1f;
+        if(x > object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1.5f) {
+            x = object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1.5f;
         }
-        if(y > object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1f) {
-            y = object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1f;
+        if(y > object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1.3f) {
+            y = object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1.3f;
         }
         this.getBounds().setPosition(x, y);
     }

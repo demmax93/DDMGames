@@ -37,10 +37,10 @@ public class GameScreen implements Screen {
         background = new Background(backgroundTexture, 0, 0, backgroundTexture.getWidth()/200, backgroundTexture.getHeight()/200, 1, 1);
         bricks = new ArrayList<>();
         textureBrick = new Texture(Gdx.files.internal("core/assets/badlogic.jpg"));
-        bricks.add(new Brick(textureBrick, 8f, 8f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
+        bricks.add(new Brick(textureBrick, 8f, 8f, textureBrick.getWidth()/150, textureBrick.getHeight()/150, 1, 1));
         bricks.add(new Brick(textureBrick, 15f, 15f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
-        bricks.add(new Brick(textureBrick, 14f, 7f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
-        bricks.add(new Brick(textureBrick, 3f, 11f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
+        bricks.add(new Brick(textureBrick, 14f, 7f, textureBrick.getWidth()/200, textureBrick.getHeight()/200, 1, 1));
+        bricks.add(new Brick(textureBrick, 3f, 11f, textureBrick.getWidth()/125, textureBrick.getHeight()/125, 1, 1));
     }
 
     @Override

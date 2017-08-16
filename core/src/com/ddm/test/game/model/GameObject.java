@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Polygon;
 
 public abstract class GameObject {
 
-    private Polygon bounds;
+    //private Polygon bounds;
     private Sprite object;
     private Animation<TextureRegion> walkAnimation;
 
@@ -23,9 +23,9 @@ public abstract class GameObject {
         object.setPosition(x, y);
         object.setOriginCenter();
 
-        bounds = new Polygon(new float[]{0f, 0f, width, 0f, width, height, 0f, height});
-        bounds.setPosition(x, y);
-        bounds.setOrigin(width, height);
+//        bounds = new Polygon(new float[]{0f, 0f, width, 0f, width, height, 0f, height});
+//        bounds.setPosition(x, y);
+//        bounds.setOrigin(width, height);
 
         TextureRegion[][] tmp = TextureRegion.split(texture,  texture.getWidth()/frameCols,  texture.getHeight()/frameRows);
         TextureRegion[] walkFrames = new TextureRegion[frameCols * frameRows];
@@ -35,7 +35,7 @@ public abstract class GameObject {
                 walkFrames[index++] = tmp[i][j];
             }
         }
-        walkAnimation = new Animation<TextureRegion>(0.13f, walkFrames); //0.025f
+        walkAnimation = new Animation<>(0.13f, walkFrames); //0.025f
         stateTime = 0f;
     }
 
@@ -43,29 +43,51 @@ public abstract class GameObject {
         stateTime += Gdx.graphics.getDeltaTime();
         TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         object.setRegion(currentFrame);
-        object.setPosition(bounds.getX(), bounds.getY());
-        object.setRotation(bounds.getRotation());
+//        object.setPosition(bounds.getX(), bounds.getY());
+//        object.setRotation(bounds.getRotation());
         object.draw(batch);
     }
 
-    public Polygon getBounds() {
-        return bounds;
+    public Sprite getBounds() {
+        return object;
+    }
+
+    public void checkCollisionForBackground(GameObject background) {
+        float x = this.getBounds().getX();
+        float y = this.getBounds().getY();
+        if(x < this.getBounds().getWidth()/2 + 0.5f) {
+            x = this.getBounds().getWidth()/2 + 0.5f;
+        }
+        if(y < this.getBounds().getHeight()/2) {
+            y = this.getBounds().getHeight()/2 ;
+        }
+        if(x > background.getBounds().getWidth() - this.getBounds().getWidth()/2 - 1.5f) {
+            x = background.getBounds().getWidth() - this.getBounds().getWidth()/2 - 1.5f;
+        }
+        if(y > background.getBounds().getHeight() - this.getBounds().getHeight()/2 - 1.3f) {
+            y = background.getBounds().getHeight() - this.getBounds().getHeight()/2 - 1.3f;
+        }
+        this.getBounds().setPosition(x, y);
     }
 
     public void checkCollision(GameObject object) {
         float x = this.getBounds().getX();
         float y = this.getBounds().getY();
-        if(x < this.getBounds().getOriginX()/2 + 0.5) {
-            x = this.getBounds().getOriginX()/2 + 0.5f;
-        }
-        if(y < this.getBounds().getOriginY()/2 ) {
-            y = this.getBounds().getOriginY()/2 ;
-        }
-        if(x > object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1.5f) {
-            x = object.getBounds().getOriginX() - this.getBounds().getOriginX()/2 - 1.5f;
-        }
-        if(y > object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1.3f) {
-            y = object.getBounds().getOriginY() - this.getBounds().getOriginY()/2 - 1.3f;
+
+        if(object.getBounds().getBoundingRectangle().overlaps(this.getBounds().getBoundingRectangle())) {
+
+            if(this.getBounds().getX() + this.getBounds().getWidth()/2 > object.getBounds().getX() - object.getBounds().getWidth()/2 ) {
+                x = this.getBounds().getX() + 0.1f;
+            }
+            if(this.getBounds().getX() - this.getBounds().getWidth()/2 < object.getBounds().getX() + object.getBounds().getWidth()/2) {
+                x = this.getBounds().getX() - 0.1f;
+            }
+            if(this.getBounds().getY() + this.getBounds().getHeight()/2 > object.getBounds().getY() - object.getBounds().getHeight()/2 ) {
+                y = this.getBounds().getY() + 0.1f;
+            }
+            if(this.getBounds().getY() - this.getBounds().getHeight()/2 < object.getBounds().getY() + object.getBounds().getHeight()/2 ) {
+                y = this.getBounds().getY() - 0.1f;
+            }
         }
         this.getBounds().setPosition(x, y);
     }

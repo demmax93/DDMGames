@@ -2,14 +2,15 @@ package com.ddm.test.game.control;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.ddm.test.game.view.GameScreen;
 
 public class PlaneController {
-    private Polygon planeBounds;
+    private Sprite planeBounds;
 
-    public PlaneController(Polygon planeBounds) {
+    public PlaneController(Sprite planeBounds) {
         this.planeBounds = planeBounds;
     }
 

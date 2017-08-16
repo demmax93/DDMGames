@@ -7,7 +7,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ddm.test.game.model.Background;
+import com.ddm.test.game.model.Brick;
 import com.ddm.test.game.model.Plane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameScreen implements Screen {
 
@@ -16,10 +20,12 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture texture;
     private Texture backgroundTexture;
+    private Texture textureBrick;
     private Plane plane;
     private Background background;
     private OrthographicCamera camera;
     public static float deltaCff;
+    private List<Brick> bricks;
 
     @Override
     public void show() {
@@ -29,6 +35,12 @@ public class GameScreen implements Screen {
         plane = new Plane(texture, 3,3, texture.getWidth()/100f, texture.getHeight()/5850f, 1, 39);
         backgroundTexture = new Texture(Gdx.files.internal("core/assets/background.jpeg"));
         background = new Background(backgroundTexture, 0, 0, backgroundTexture.getWidth()/200, backgroundTexture.getHeight()/200, 1, 1);
+        bricks = new ArrayList<>();
+        textureBrick = new Texture(Gdx.files.internal("core/assets/badlogic.jpg"));
+        bricks.add(new Brick(textureBrick, 8f, 8f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
+        bricks.add(new Brick(textureBrick, 15f, 15f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
+        bricks.add(new Brick(textureBrick, 14f, 7f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
+        bricks.add(new Brick(textureBrick, 3f, 11f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
     }
 
     @Override
@@ -39,8 +51,10 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         background.draw(batch);
+        bricks.forEach(brick -> brick.draw(batch));
         plane.draw(batch);
-        plane.checkCollision(background);
+        plane.checkCollisionForBackground(background);
+        bricks.forEach(brick -> plane.checkCollision(brick));
         batch.end();
         setPositionCamera();
     }
@@ -51,14 +65,14 @@ public class GameScreen implements Screen {
         if(x < camera.viewportWidth/2) {
             x = camera.viewportWidth/2;
         }
-        if(y <  camera.viewportHeight/2) {
+        if(y < camera.viewportHeight/2) {
             y = camera.viewportHeight/2;
         }
-        if(x > background.getBounds().getOriginX() - camera.viewportWidth/2) {
-            x = background.getBounds().getOriginX() - camera.viewportWidth/2;
+        if(x > background.getBounds().getWidth() - camera.viewportWidth/2) {
+            x = background.getBounds().getWidth() - camera.viewportWidth/2;
         }
-        if(y > background.getBounds().getOriginY() - camera.viewportHeight/2) {
-            y = background.getBounds().getOriginY() - camera.viewportHeight/2;
+        if(y > background.getBounds().getHeight() - camera.viewportHeight/2) {
+            y = background.getBounds().getHeight() - camera.viewportHeight/2;
         }
         camera.position.set(x,y, 0);
         camera.update();
@@ -91,6 +105,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         backgroundTexture.dispose();
         texture.dispose();
+        textureBrick.dispose();
         batch.dispose();
     }
 }

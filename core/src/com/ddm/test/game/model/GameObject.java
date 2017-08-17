@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Polygon;
 
 public abstract class GameObject {
 
@@ -17,9 +16,7 @@ public abstract class GameObject {
 
     public GameObject(Texture texture, float x, float y, float width, float height, int frameCols, int frameRows) {
         object = new Sprite();
-        object.setSize(width, height);
-        object.setOrigin(width, height);
-        object.setPosition(x, y);
+        object.setBounds(x, y, width, height);
         object.setOriginCenter();
 
         TextureRegion[][] tmp = TextureRegion.split(texture,  texture.getWidth()/frameCols,  texture.getHeight()/frameRows);
@@ -41,47 +38,47 @@ public abstract class GameObject {
         object.draw(batch);
     }
 
-    public Sprite getBounds() {
+    public Sprite getSprite() {
         return object;
     }
 
     public void checkCollisionForBackground(GameObject background) {
-        float x = this.getBounds().getX();
-        float y = this.getBounds().getY();
-        if(x < this.getBounds().getWidth()/2 + 0.5f) {
-            x = this.getBounds().getWidth()/2 + 0.5f;
+        float x = this.getSprite().getX();
+        float y = this.getSprite().getY();
+        if(x < this.getSprite().getWidth()/2 + 0.5f) {
+            x = this.getSprite().getWidth()/2 + 0.5f;
         }
-        if(y < this.getBounds().getHeight()/2) {
-            y = this.getBounds().getHeight()/2 ;
+        if(y < this.getSprite().getHeight()/2) {
+            y = this.getSprite().getHeight()/2 ;
         }
-        if(x > background.getBounds().getWidth() - this.getBounds().getWidth()/2 - 1.5f) {
-            x = background.getBounds().getWidth() - this.getBounds().getWidth()/2 - 1.5f;
+        if(x > background.getSprite().getWidth() - this.getSprite().getWidth()/2 - 1.5f) {
+            x = background.getSprite().getWidth() - this.getSprite().getWidth()/2 - 1.5f;
         }
-        if(y > background.getBounds().getHeight() - this.getBounds().getHeight()/2 - 1.3f) {
-            y = background.getBounds().getHeight() - this.getBounds().getHeight()/2 - 1.3f;
+        if(y > background.getSprite().getHeight() - this.getSprite().getHeight()/2 - 1.3f) {
+            y = background.getSprite().getHeight() - this.getSprite().getHeight()/2 - 1.3f;
         }
-        this.getBounds().setPosition(x, y);
+        this.getSprite().setPosition(x, y);
     }
 
     public void checkCollision(GameObject object) {
-        float x = this.getBounds().getX();
-        float y = this.getBounds().getY();
+        float x = this.getSprite().getX();
+        float y = this.getSprite().getY();
 
-        if(object.getBounds().getBoundingRectangle().overlaps(this.getBounds().getBoundingRectangle())) {
+        if(object.getSprite().getBoundingRectangle().overlaps(this.getSprite().getBoundingRectangle())) {
 
-            if(this.getBounds().getX() + this.getBounds().getWidth()/2 > object.getBounds().getX() - object.getBounds().getWidth()/2 ) {
-                x = this.getBounds().getX() + 0.1f;
+            if(this.getSprite().getX() + this.getSprite().getWidth()/2 > object.getSprite().getX() - object.getSprite().getWidth()/2 ) {
+                x = this.getSprite().getX() + 0.1f;
             }
-            if(this.getBounds().getX() - this.getBounds().getWidth()/2 < object.getBounds().getX() + object.getBounds().getWidth()/2) {
-                x = this.getBounds().getX() - 0.1f;
+            if(this.getSprite().getX() - this.getSprite().getWidth()/2 < object.getSprite().getX() + object.getSprite().getWidth()/2) {
+                x = this.getSprite().getX() - 0.1f;
             }
-            if(this.getBounds().getY() + this.getBounds().getHeight()/2 > object.getBounds().getY() - object.getBounds().getHeight()/2 ) {
-                y = this.getBounds().getY() + 0.1f;
+            if(this.getSprite().getY() + this.getSprite().getHeight()/2 > object.getSprite().getY() - object.getSprite().getHeight()/2 ) {
+                y = this.getSprite().getY() + 0.1f;
             }
-            if(this.getBounds().getY() - this.getBounds().getHeight()/2 < object.getBounds().getY() + object.getBounds().getHeight()/2 ) {
-                y = this.getBounds().getY() - 0.1f;
+            if(this.getSprite().getY() - this.getSprite().getHeight()/2 < object.getSprite().getY() + object.getSprite().getHeight()/2 ) {
+                y = this.getSprite().getY() - 0.1f;
             }
         }
-        this.getBounds().setPosition(x, y);
+        this.getSprite().setPosition(x, y);
     }
 }

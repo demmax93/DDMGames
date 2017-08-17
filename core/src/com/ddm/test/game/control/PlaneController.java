@@ -2,13 +2,16 @@ package com.ddm.test.game.control;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
 import com.ddm.test.game.view.GameScreen;
 
 public class PlaneController {
     private Sprite planeBounds;
+    private ParticleEffect firstFlame;
+    private ParticleEffect secondFlame;
 
     public PlaneController(Sprite planeBounds) {
         this.planeBounds = planeBounds;
@@ -30,10 +33,14 @@ public class PlaneController {
             planeBounds.rotate(rotationSpeed * GameScreen.deltaCff * planeSpeed);
         } else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             planeBounds.rotate(-rotationSpeed * GameScreen.deltaCff * planeSpeed);
-        } else planeBounds.rotate(0.0f);
+        }
 
         planeBounds.setPosition(planeBounds.getX() + MathUtils.cosDeg(planeBounds.getRotation() + 90) * planeSpeed * GameScreen.deltaCff,
                 planeBounds.getY() + MathUtils.sinDeg(planeBounds.getRotation() + 90) * planeSpeed * GameScreen.deltaCff);
+
+        if(firstFlame != null && secondFlame != null) {
+            flameRotation();
+        }
     }
 
     private void downSpeed() {
@@ -53,5 +60,28 @@ public class PlaneController {
             return -maxSpeed;
         }
         return planeSpeed;
+    }
+
+    public void setFirstFlame(ParticleEffect firstFlame) {
+        this.firstFlame = firstFlame;
+    }
+
+    public void setSecondFlame(ParticleEffect secondFlame) {
+        this.secondFlame = secondFlame;
+    }
+
+    private void flameRotation(){
+        float[] vertices = planeBounds.getVertices();
+        float centrX = (vertices[Batch.X4] + vertices[Batch.X1])/2;
+        float centrY = (vertices[Batch.Y4] + vertices[Batch.Y1])/2;
+
+        firstFlame.setPosition(centrX + 0.1f * Math.signum(MathUtils.cosDeg(planeBounds.getRotation() + 90)),
+                centrY + 0.2f * Math.signum(MathUtils.sinDeg(planeBounds.getRotation() + 90)));
+        secondFlame.setPosition(centrX - 0.1f * Math.signum(MathUtils.cosDeg(planeBounds.getRotation() + 90)),
+                centrY + 0.2f * Math.signum(MathUtils.sinDeg(planeBounds.getRotation() + 90)));
+        firstFlame.getEmitters().first().getAngle().setHigh(planeBounds.getRotation() - 90);
+        firstFlame.getEmitters().first().getAngle().setLow(planeBounds.getRotation() - 90);
+        secondFlame.getEmitters().first().getAngle().setHigh(planeBounds.getRotation() - 90);
+        secondFlame.getEmitters().first().getAngle().setLow(planeBounds.getRotation() - 90);
     }
 }

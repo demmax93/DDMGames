@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ddm.test.game.model.Background;
 import com.ddm.test.game.model.Brick;
@@ -59,23 +58,22 @@ public class GameScreen implements Screen {
         bricks.forEach(brick -> plane.checkCollision(brick));
         batch.end();
         setPositionCamera();
-
     }
 
     private void setPositionCamera() {
-        float x = (float) (camera.position.x +((plane.getBounds().getX() - camera.position.x) * TEEWS));
-        float y = (float) (camera.position.y +((plane.getBounds().getY() - camera.position.y) * TEEWS));
+        float x = (float) (camera.position.x +((plane.getSprite().getX() - camera.position.x) * TEEWS));
+        float y = (float) (camera.position.y +((plane.getSprite().getY() - camera.position.y) * TEEWS));
         if(x < camera.viewportWidth/2) {
             x = camera.viewportWidth/2;
         }
         if(y < camera.viewportHeight/2) {
             y = camera.viewportHeight/2;
         }
-        if(x > background.getBounds().getWidth() - camera.viewportWidth/2) {
-            x = background.getBounds().getWidth() - camera.viewportWidth/2;
+        if(x > background.getSprite().getWidth() - camera.viewportWidth/2) {
+            x = background.getSprite().getWidth() - camera.viewportWidth/2;
         }
-        if(y > background.getBounds().getHeight() - camera.viewportHeight/2) {
-            y = background.getBounds().getHeight() - camera.viewportHeight/2;
+        if(y > background.getSprite().getHeight() - camera.viewportHeight/2) {
+            y = background.getSprite().getHeight() - camera.viewportHeight/2;
         }
         camera.position.set(x,y, 0);
         camera.update();

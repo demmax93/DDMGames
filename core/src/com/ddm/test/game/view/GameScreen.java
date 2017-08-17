@@ -27,8 +27,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     public static float deltaCff;
     private List<Brick> bricks;
-    private ParticleEffect firstFlame;
-    private ParticleEffect secondFlame;
+
 
     @Override
     public void show() {
@@ -44,18 +43,6 @@ public class GameScreen implements Screen {
         bricks.add(new Brick(textureBrick, 15f, 15f, textureBrick.getWidth()/100, textureBrick.getHeight()/100, 1, 1));
         bricks.add(new Brick(textureBrick, 14f, 7f, textureBrick.getWidth()/200, textureBrick.getHeight()/200, 1, 1));
         bricks.add(new Brick(textureBrick, 3f, 11f, textureBrick.getWidth()/125, textureBrick.getHeight()/125, 1, 1));
-
-        firstFlame = new ParticleEffect();
-        firstFlame.load(Gdx.files.internal("core/assets/sfx/plane_fire.p"), Gdx.files.internal("core/assets/texture/"));
-        firstFlame.getEmitters().first().setPosition(plane.getBounds().getX(), plane.getBounds().getY());
-        firstFlame.scaleEffect(.002f);
-        firstFlame.start();
-
-        secondFlame = new ParticleEffect();
-        secondFlame.load(Gdx.files.internal("core/assets/sfx/plane_fire.p"), Gdx.files.internal("core/assets/texture/"));
-        secondFlame.getEmitters().first().setPosition(plane.getBounds().getX(), plane.getBounds().getY());
-        secondFlame.scaleEffect(.002f);
-        secondFlame.start();
     }
 
     @Override
@@ -64,19 +51,15 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
-        flameRotation(); //need fix
         batch.begin();
         background.draw(batch);
         bricks.forEach(brick -> brick.draw(batch));
-        firstFlame.draw(batch, delta);
-        secondFlame.draw(batch, delta);
         plane.draw(batch);
         plane.checkCollisionForBackground(background);
         bricks.forEach(brick -> plane.checkCollision(brick));
         batch.end();
         setPositionCamera();
-        if (firstFlame.isComplete()) firstFlame.reset();
-        if (secondFlame.isComplete()) secondFlame.reset();
+
     }
 
     private void setPositionCamera() {
@@ -96,15 +79,6 @@ public class GameScreen implements Screen {
         }
         camera.position.set(x,y, 0);
         camera.update();
-    }
-
-    private void flameRotation(){
-        firstFlame.setPosition(plane.getBounds().getX()+0.4f, plane.getBounds().getY()+0.2f);
-        secondFlame.setPosition(plane.getBounds().getX()+0.6f, plane.getBounds().getY()+ 0.2f);
-        firstFlame.getEmitters().first().getAngle().setHigh(plane.getBounds().getRotation()-90);
-        firstFlame.getEmitters().first().getAngle().setLow(plane.getBounds().getRotation()-90);
-        secondFlame.getEmitters().first().getAngle().setHigh(plane.getBounds().getRotation()-90);
-        secondFlame.getEmitters().first().getAngle().setLow(plane.getBounds().getRotation()-90);
     }
 
     @Override

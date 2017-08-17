@@ -74,6 +74,7 @@ public class PlaneController {
      * NEED FIXED
      *
      * NEED FLAME ATTACH ON CENTER DOWN VERGE
+     * Косяк в том что когда корабль поваричается налево или направо, значения на которые мы отдоляем от центра грани, должны меняться местами по осям
      */
     private void flameRotation(){
         float[] vertices = planeSprite.getVertices();

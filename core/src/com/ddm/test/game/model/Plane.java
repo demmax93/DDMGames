@@ -31,11 +31,11 @@ public class Plane extends GameObject {
 
     @Override
     public void draw(SpriteBatch batch) {
-        super.draw(batch);
         firstFlame.draw(batch, GameScreen.deltaCff);
         secondFlame.draw(batch, GameScreen.deltaCff);
         controller.handler();
         if (firstFlame.isComplete()) firstFlame.reset();
         if (secondFlame.isComplete()) secondFlame.reset();
+        super.draw(batch);
     }
 }

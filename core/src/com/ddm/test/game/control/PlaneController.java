@@ -70,6 +70,11 @@ public class PlaneController {
         this.secondFlame = secondFlame;
     }
 
+    /**
+     * NEED FIXED
+     *
+     * NEED FLAME ATTACH ON CENTER DOWN VERGE
+     */
     private void flameRotation(){
         float[] vertices = planeSprite.getVertices();
         float centrX = (vertices[Batch.X4] + vertices[Batch.X1])/2;

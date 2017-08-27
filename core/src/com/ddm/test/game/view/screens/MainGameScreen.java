@@ -16,10 +16,6 @@ import com.ddm.test.game.MapManager;
 import com.ddm.test.game.control.PlayerController;
 import com.ddm.test.game.model.Entity;
 
-/**
- * DMKA
- * 25.08.2017
- */
 public class MainGameScreen implements Screen {
     private static final String TAG =
             MainGameScreen.class.getSimpleName();
@@ -40,8 +36,9 @@ public class MainGameScreen implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer = null;
     private OrthographicCamera camera = null;
     private static MapManager mapMgr;
+    private static TiledMapTileLayer layerMap = null;
     public static final double TEEWS = 0.04; // opozdanie camery
-    TiledMapTileLayer layerMap ;
+
 
     public MainGameScreen() {
         mapMgr = new MapManager();
@@ -56,7 +53,7 @@ public class MainGameScreen implements Screen {
         //get the current size
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
-        mapRenderer = new OrthogonalTiledMapRenderer (mapMgr.getCurrentMap(), MapManager.UNIT_SCALE);
+        mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentMap(), MapManager.UNIT_SCALE);
         mapRenderer.setView(camera);
         Gdx.app.debug(TAG, "UnitScale value is:" + mapRenderer.getUnitScale());
         player = new Entity();
@@ -64,7 +61,7 @@ public class MainGameScreen implements Screen {
         currentPlayerSprite = player.getFrameSprite();
         controller = new PlayerController(player);
         Gdx.input.setInputProcessor(controller);
-        layerMap = (TiledMapTileLayer)mapMgr.getCurrentMap().getLayers().get(0);
+        layerMap = (TiledMapTileLayer) mapMgr.getCurrentMap().getLayers().get(0);
     }
 
     @Override
@@ -79,33 +76,33 @@ public class MainGameScreen implements Screen {
         player.update(delta);
         currentPlayerFrame = player.getFrame();
         updatePortalLayerActivation(player.boundingBox);
-        if( !isCollisionWithMapLayer(player.boundingBox) ){
+        if (!isCollisionWithMapLayer(player.boundingBox)) {
             player.setNextPositionToCurrent();
         }
         controller.update(delta);
         mapRenderer.setView(camera);
         mapRenderer.render();
         mapRenderer.getBatch().begin();
-        mapRenderer.getBatch().draw(currentPlayerFrame, currentPlayerSprite.getX(), currentPlayerSprite.getY(), 1,1);
+        mapRenderer.getBatch().draw(currentPlayerFrame, currentPlayerSprite.getX(), currentPlayerSprite.getY(), 1, 1);
         mapRenderer.getBatch().end();
     }
 
-    private void setCameraPosition(){
-        float x = (float) (camera.position.x +((currentPlayerSprite.getX() - camera.position.x) * TEEWS));
-        float y = (float) (camera.position.y +((currentPlayerSprite.getY() - camera.position.y) * TEEWS));
-        if(x < camera.viewportWidth/2) {
-            x = camera.viewportWidth/2;
+    private void setCameraPosition() {
+        float x = (float) (camera.position.x + ((currentPlayerSprite.getX() - camera.position.x) * TEEWS));
+        float y = (float) (camera.position.y + ((currentPlayerSprite.getY() - camera.position.y) * TEEWS));
+        if (x < camera.viewportWidth / 2) {
+            x = camera.viewportWidth / 2;
         }
-        if(y < camera.viewportHeight/2) {
-            y = camera.viewportHeight/2;
+        if (y < camera.viewportHeight / 2) {
+            y = camera.viewportHeight / 2;
         }
-        if(x > layerMap.getTileWidth() * layerMap.getWidth()/100 - camera.viewportWidth/2) {
-            x = layerMap.getTileWidth() * layerMap.getWidth()/100 - camera.viewportWidth/2;
+        if (x > layerMap.getTileWidth() * layerMap.getWidth() / 100 - camera.viewportWidth / 2) {
+            x = layerMap.getTileWidth() * layerMap.getWidth() / 100 - camera.viewportWidth / 2;
         }
-        if(y > layerMap.getTileHeight() * layerMap.getHeight()/100 - camera.viewportHeight/2) {
-            y = layerMap.getTileHeight() * layerMap.getHeight()/100 - camera.viewportHeight/2;
+        if (y > layerMap.getTileHeight() * layerMap.getHeight() / 100 - camera.viewportHeight / 2) {
+            y = layerMap.getTileHeight() * layerMap.getHeight() / 100 - camera.viewportHeight / 2;
         }
-        camera.position.set(x,y, 0);
+        camera.position.set(x, y, 0);
         camera.update();
     }
 
@@ -129,7 +126,7 @@ public class MainGameScreen implements Screen {
         mapRenderer.dispose();
     }
 
-    private void setupViewport(int width, int height){
+    private void setupViewport(int width, int height) {
         //Make the viewport a percentage of the total display area
         VIEWPORT.virtualWidth = width;
         VIEWPORT.virtualHeight = height;
@@ -142,30 +139,30 @@ public class MainGameScreen implements Screen {
         //aspect ratio for current viewport
         VIEWPORT.aspectRatio = (VIEWPORT.virtualWidth / VIEWPORT.virtualHeight);
         //update viewport if there could be skewing
-        if( VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRatio){
+        if (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRatio) {
             //Letterbox left and right
-            VIEWPORT.viewportWidth = VIEWPORT.viewportHeight * (VIEWPORT.physicalWidth/VIEWPORT.physicalHeight);
+            VIEWPORT.viewportWidth = VIEWPORT.viewportHeight * (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight);
             VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
-        }else{
+        } else {
             //letterbox above and below
             VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
-            VIEWPORT.viewportHeight = VIEWPORT.viewportWidth * (VIEWPORT.physicalHeight/VIEWPORT.physicalWidth);
+            VIEWPORT.viewportHeight = VIEWPORT.viewportWidth * (VIEWPORT.physicalHeight / VIEWPORT.physicalWidth);
         }
-        Gdx.app.debug(TAG, "WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + "," + VIEWPORT.virtualHeight + ")" );
+        Gdx.app.debug(TAG, "WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + "," + VIEWPORT.virtualHeight + ")");
         Gdx.app.debug(TAG, "WorldRenderer: viewport: (" + VIEWPORT.viewportWidth + "," + VIEWPORT.viewportHeight + ")");
         Gdx.app.debug(TAG, "WorldRenderer: physical: (" + VIEWPORT.physicalWidth + "," + VIEWPORT.physicalHeight + ")");
     }
 
-    private boolean isCollisionWithMapLayer(Rectangle boundingBox){
-        MapLayer mapCollisionLayer =  mapMgr.getCollisionLayer();
-        if( mapCollisionLayer == null ){
+    private boolean isCollisionWithMapLayer(Rectangle boundingBox) {
+        MapLayer mapCollisionLayer = mapMgr.getCollisionLayer();
+        if (mapCollisionLayer == null) {
             return false;
         }
         Rectangle rectangle = null;
-        for( MapObject object: mapCollisionLayer.getObjects()){
-            if(object instanceof RectangleMapObject) {
-                rectangle = ((RectangleMapObject)object).getRectangle();
-                if( boundingBox.overlaps(rectangle) ){
+        for (MapObject object : mapCollisionLayer.getObjects()) {
+            if (object instanceof RectangleMapObject) {
+                rectangle = ((RectangleMapObject) object).getRectangle();
+                if (boundingBox.overlaps(rectangle)) {
                     return true;
                 }
             }
@@ -173,21 +170,21 @@ public class MainGameScreen implements Screen {
         return false;
     }
 
-    private boolean updatePortalLayerActivation(Rectangle boundingBox){
-        MapLayer mapPortalLayer =  mapMgr.getPortalLayer();
-        if( mapPortalLayer == null ){
+    private boolean updatePortalLayerActivation(Rectangle boundingBox) {
+        MapLayer mapPortalLayer = mapMgr.getPortalLayer();
+        if (mapPortalLayer == null) {
             return false;
         }
         Rectangle rectangle = null;
-        for( MapObject object: mapPortalLayer.getObjects()){
-            if(object instanceof RectangleMapObject) {
-                rectangle = ((RectangleMapObject)object).getRectangle();
-                if( boundingBox.overlaps(rectangle) ){
+        for (MapObject object : mapPortalLayer.getObjects()) {
+            if (object instanceof RectangleMapObject) {
+                rectangle = ((RectangleMapObject) object).getRectangle();
+                if (boundingBox.overlaps(rectangle)) {
                     String mapName = object.getName();
-                    if( mapName == null ) {
+                    if (mapName == null) {
                         return false;
                     }
-                    mapMgr.setClosestStartPositionFromScaledUnits (player.getCurrentPosition());
+                    mapMgr.setClosestStartPositionFromScaledUnits(player.getCurrentPosition());
                     mapMgr.loadMap(mapName);
                     player.init(mapMgr.getPlayerStartUnitScaled().x, mapMgr.getPlayerStartUnitScaled().y);
                     mapRenderer.setMap(mapMgr.getCurrentMap());
@@ -197,5 +194,9 @@ public class MainGameScreen implements Screen {
             }
         }
         return false;
+    }
+
+    public static TiledMapTileLayer getLayerMap() {
+        return layerMap;
     }
 }

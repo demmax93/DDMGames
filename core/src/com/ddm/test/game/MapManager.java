@@ -9,10 +9,6 @@ import com.badlogic.gdx.math.*;
 
 import java.util.Hashtable;
 
-/**
- * DMKA
- * 25.08.2017
- */
 public class MapManager {
     private static final String TAG = MapManager.class.getSimpleName();
     //All maps for the game
@@ -87,12 +83,11 @@ public class MapManager {
             Vector2 start = playerStartLocationTable.get(currentMapName);
             if (start.isZero()) {
                 setClosestStartPosition(playerStart);
-                start = playerStartLocationTable.
-                        get(currentMapName);
+                start = playerStartLocationTable.get(currentMapName);
             }
             playerStart.set(start.x, start.y);
         }
-        Gdx.app.debug(TAG, "Player Start:("+playerStart.x + ","+playerStart.y +")");
+        Gdx.app.debug(TAG, "Player Start:(" + playerStart.x + "," + playerStart.y + ")");
     }
 
     public TiledMap getCurrentMap() {
@@ -110,10 +105,10 @@ public class MapManager {
     public MapLayer getPortalLayer() {
         return portalLayer;
     }
-    public Vector2 getPlayerStartUnitScaled(){
+
+    public Vector2 getPlayerStartUnitScaled() {
         Vector2 playerStartTemp = playerStart.cpy();
-        playerStartTemp.set(playerStart.x * UNIT_SCALE,
-                playerStart.y * UNIT_SCALE);
+        playerStartTemp.set(playerStart.x * UNIT_SCALE, playerStart.y * UNIT_SCALE);
         return playerStartTemp;
     }
 
@@ -126,24 +121,20 @@ public class MapManager {
         //last known position
         for (MapObject object : spawnsLayer.getObjects()) {
             if (object.getName().equalsIgnoreCase(PLAYER_START)) {
-                ((RectangleMapObject) object).getRectangle().
-                        getPosition(playerStartPositionRect);
+                ((RectangleMapObject) object).getRectangle().getPosition(playerStartPositionRect);
                 float distance = position.dst2(playerStartPositionRect);
-                if (distance < shortestDistance ||
-                        shortestDistance == 0) {
-                    closestPlayerStartPosition.set(
-                            playerStartPositionRect);
+                if (distance < shortestDistance || shortestDistance == 0) {
+                    closestPlayerStartPosition.set(playerStartPositionRect);
                     shortestDistance = distance;
                 }
             }
         }
     }
-    public void setClosestStartPositionFromScaledUnits(
-            Vector2 position){
-        if( UNIT_SCALE <= 0 )
+
+    public void setClosestStartPositionFromScaledUnits(Vector2 position) {
+        if (UNIT_SCALE <= 0)
             return;
-        convertedUnits.set(position.x/UNIT_SCALE,
-                position.y/UNIT_SCALE);
+        convertedUnits.set(position.x / UNIT_SCALE, position.y / UNIT_SCALE);
         setClosestStartPosition(convertedUnits);
     }
 

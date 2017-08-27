@@ -44,26 +44,27 @@ public class PlayerController implements InputProcessor {
     }
 
     private Entity player;
-    public PlayerController(Entity player){
+
+    public PlayerController(Entity player) {
         this.lastMouseCoordinates = new Vector3();
         this.player = player;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if( keycode == Input.Keys.LEFT || keycode == Input.Keys.A){
+        if (keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
             this.leftPressed();
         }
-        if( keycode == Input.Keys.RIGHT || keycode == Input.Keys.D){
+        if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
             this.rightPressed();
         }
-        if( keycode == Input.Keys.UP || keycode == Input.Keys.W){
+        if (keycode == Input.Keys.UP || keycode == Input.Keys.W) {
             this.upPressed();
         }
-        if( keycode == Input.Keys.DOWN || keycode == Input.Keys.S){
+        if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
             this.downPressed();
         }
-        if( keycode == Input.Keys.ESCAPE){
+        if (keycode == Input.Keys.ESCAPE) {
             this.quitPressed();
         }
         return true;
@@ -71,19 +72,19 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if( keycode == Input.Keys.LEFT || keycode == Input.Keys.A){
+        if (keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
             this.leftReleased();
         }
-        if( keycode == Input.Keys.RIGHT || keycode == Input.Keys.D){
+        if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
             this.rightReleased();
         }
-        if( keycode == Input.Keys.UP || keycode == Input.Keys.W ){
+        if (keycode == Input.Keys.UP || keycode == Input.Keys.W) {
             this.upReleased();
         }
-        if( keycode == Input.Keys.DOWN || keycode == Input.Keys.S){
+        if (keycode == Input.Keys.DOWN || keycode == Input.Keys.S) {
             this.downReleased();
         }
-        if( keycode == Input.Keys.ESCAPE){
+        if (keycode == Input.Keys.ESCAPE) {
             this.quitReleased();
         }
         return true;
@@ -96,16 +97,16 @@ public class PlayerController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if( button == Input.Buttons.LEFT || button == Input.Buttons.RIGHT ){
+        if (button == Input.Buttons.LEFT || button == Input.Buttons.RIGHT) {
             this.setClickedMouseCoordinates(screenX, screenY);
         }
 
         //left is selection, right is context menu
-        if( button == Input.Buttons.LEFT){
+        if (button == Input.Buttons.LEFT) {
             this.selectMouseButtonPressed(screenX, screenY);
         }
 
-        if( button == Input.Buttons.RIGHT){
+        if (button == Input.Buttons.RIGHT) {
             this.doActionMouseButtonPressed(screenX, screenY);
         }
         return true;
@@ -114,11 +115,11 @@ public class PlayerController implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         //left is selection, right is context menu
-        if( button == Input.Buttons.LEFT){
+        if (button == Input.Buttons.LEFT) {
             this.selectMouseButtonReleased(screenX, screenY);
         }
 
-        if( button == Input.Buttons.RIGHT){
+        if (button == Input.Buttons.RIGHT) {
             this.doActionMouseButtonReleased(screenX, screenY);
         }
         return true;
@@ -139,63 +140,76 @@ public class PlayerController implements InputProcessor {
         return false;
     }
 
-    public void dispose(){
+    public void dispose() {
     }
 
     //Key presses
-    public void leftPressed(){
+    public void leftPressed() {
         keys.put(Keys.LEFT, true);
     }
-    public void rightPressed(){
+
+    public void rightPressed() {
         keys.put(Keys.RIGHT, true);
     }
-    public void upPressed(){
+
+    public void upPressed() {
         keys.put(Keys.UP, true);
     }
-    public void downPressed(){
+
+    public void downPressed() {
         keys.put(Keys.DOWN, true);
     }
-    public void quitPressed(){
+
+    public void quitPressed() {
         keys.put(Keys.QUIT, true);
     }
-    public void setClickedMouseCoordinates(int x, int y){
+
+    public void setClickedMouseCoordinates(int x, int y) {
         lastMouseCoordinates.set(x, y, 0);
     }
-    public void selectMouseButtonPressed(int x, int y){
+
+    public void selectMouseButtonPressed(int x, int y) {
         mouseButtons.put(Mouse.SELECT, true);
     }
-    public void doActionMouseButtonPressed(int x, int y){
+
+    public void doActionMouseButtonPressed(int x, int y) {
         mouseButtons.put(Mouse.DOACTION, true);
     }
 
     //Releases
-    public void leftReleased(){
+    public void leftReleased() {
         keys.put(Keys.LEFT, false);
     }
-    public void rightReleased(){
+
+    public void rightReleased() {
         keys.put(Keys.RIGHT, false);
     }
-    public void upReleased(){
+
+    public void upReleased() {
         keys.put(Keys.UP, false);
     }
-    public void downReleased(){
+
+    public void downReleased() {
         keys.put(Keys.DOWN, false);
     }
-    public void quitReleased(){
+
+    public void quitReleased() {
         keys.put(Keys.QUIT, false);
     }
-    public void selectMouseButtonReleased(int x, int y){
+
+    public void selectMouseButtonReleased(int x, int y) {
         mouseButtons.put(Mouse.SELECT, false);
     }
-    public void doActionMouseButtonReleased(int x, int y){
+
+    public void doActionMouseButtonReleased(int x, int y) {
         mouseButtons.put(Mouse.DOACTION, false);
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         processInput(delta);
     }
 
-    public static void hide(){
+    public static void hide() {
         keys.put(Keys.LEFT, false);
         keys.put(Keys.RIGHT, false);
         keys.put(Keys.UP, false);
@@ -203,33 +217,33 @@ public class PlayerController implements InputProcessor {
         keys.put(Keys.QUIT, false);
     }
 
-    private void processInput(float delta){
+    private void processInput(float delta) {
         //Keyboard input
-        if( keys.get(Keys.LEFT)){
+        if (keys.get(Keys.LEFT)) {
             player.calculateNextPosition(Entity.Direction.LEFT, delta);
             player.setState(Entity.State.WALKING);
             player.setDirection(Entity.Direction.LEFT, delta);
-        } else if( keys.get(Keys.RIGHT)){
-            player.calculateNextPosition(Entity.Direction.RIGHT,delta);
+        } else if (keys.get(Keys.RIGHT)) {
+            player.calculateNextPosition(Entity.Direction.RIGHT, delta);
             player.setState(Entity.State.WALKING);
             player.setDirection(Entity.Direction.RIGHT, delta);
         }
-        if( keys.get(Keys.UP)){
+        if (keys.get(Keys.UP)) {
             player.calculateNextPosition(Entity.Direction.UP, delta);
             player.setState(Entity.State.WALKING);
             player.setDirection(Entity.Direction.UP, delta);
-        } else if(keys.get(Keys.DOWN)){
-            player.calculateNextPosition(Entity.Direction.DOWN,delta);
+        } else if (keys.get(Keys.DOWN)) {
+            player.calculateNextPosition(Entity.Direction.DOWN, delta);
             player.setState(Entity.State.WALKING);
             player.setDirection(Entity.Direction.DOWN, delta);
-        } else if(keys.get(Keys.QUIT)){
+        } else if (keys.get(Keys.QUIT)) {
             Gdx.app.exit();
-        } else{
+        } else {
             player.setState(Entity.State.IDLE);
         }
 
         //Mouse input
-        if( mouseButtons.get(Mouse.SELECT)) {
+        if (mouseButtons.get(Mouse.SELECT)) {
             mouseButtons.put(Mouse.SELECT, false);
         }
     }

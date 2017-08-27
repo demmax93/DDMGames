@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -20,7 +21,8 @@ import java.util.UUID;
 public class Entity {
     private static final String TAG = Entity.class.getSimpleName();
     private static final String defaultSpritePath ="core/assets/texture/hero_sprites.png";
-    private Vector2 velocity;
+    private float planeSpeed, velocity = 10.0f;
+    //private Vector2 velocity;
     private String entityID;
     private Direction currentDirection = Direction.UP;
     private Direction previousDirection = Direction.UP;
@@ -41,6 +43,9 @@ public class Entity {
     }
 
     public enum Direction {
+        LEFT,
+        DOWN,
+        RIGHT,
         UP;
     }
 
@@ -53,7 +58,7 @@ public class Entity {
         this.nextPlayerPosition = new Vector2();
         this.currentPlayerPosition = new Vector2();
         this.boundingBox = new Rectangle();
-        this.velocity = new Vector2(2f,2f);
+        //this.velocity = new Vector2(2f,2f);
         Utility.loadTextureAsset(defaultSpritePath);
         loadDefaultSprite();
         loadAllAnimations();
@@ -107,8 +112,9 @@ public class Entity {
             minY = nextPlayerPosition.y;
         }
         boundingBox.set(minX, minY, width, height);
-    }  private void loadDefaultSprite()
-    {
+    }
+
+    private void loadDefaultSprite(){
         Texture texture = Utility.getTextureAsset(defaultSpritePath);
         TextureRegion[][] textureFrames = TextureRegion.split(texture, FRAME_WIDTH, FRAME_HEIGHT);
         frameSprite = new Sprite(textureFrames[0][0].getTexture(), 0,0,FRAME_WIDTH, FRAME_HEIGHT);
@@ -173,19 +179,46 @@ public class Entity {
     }
 
     public void calculateNextPosition(Direction currentDirection, float deltaTime){
-        float testX = currentPlayerPosition.x;
-        float testY = currentPlayerPosition.y;
-        velocity.scl(deltaTime);
-        switch (currentDirection) {
-            case UP :
-                testY += velocity.y;
-                break;
-            default:
-                break;
+        if (currentDirection.equals(Direction.UP)) {
+            planeSpeed += velocity * deltaTime;
+        }else if (currentDirection.equals(Direction.DOWN)) {
+            planeSpeed -= velocity * deltaTime;
+        }else downSpeed(deltaTime);
+
+        planeSpeed = sliceSpeed();
+
+        float rotationSpeed = 30f;
+        if (currentDirection.equals(Direction.LEFT)){
+            frameSprite.rotate(rotationSpeed * deltaTime * planeSpeed);
+        }else if (currentDirection.equals(Direction.RIGHT)){
+            frameSprite.rotate(-rotationSpeed * deltaTime * planeSpeed);
         }
-    nextPlayerPosition.x = testX;
-    nextPlayerPosition.y = testY;
-    //velocity
-    velocity.scl(1 / deltaTime);
-}
+
+        frameSprite.setPosition(frameSprite.getX() + MathUtils.cosDeg(frameSprite.getRotation() + 90) * planeSpeed * deltaTime,
+                frameSprite.getY() + MathUtils.sinDeg(frameSprite.getRotation() + 90) * planeSpeed * deltaTime);
+
+        nextPlayerPosition.x =frameSprite.getX();
+        nextPlayerPosition.y =frameSprite.getY();
+
+    }
+    private void downSpeed(float delta) {
+        if(planeSpeed > velocity * delta) {
+            planeSpeed -= velocity * delta;
+        } else if (planeSpeed < -velocity * delta) {
+            planeSpeed += velocity * delta;
+        } else planeSpeed = 0;
+    }
+
+    private float sliceSpeed() {
+        float maxSpeed = 5.0f;
+        if(maxSpeed < planeSpeed) {
+            return maxSpeed;
+        }
+        if(-maxSpeed > planeSpeed) {
+            return -maxSpeed;
+        }
+        return planeSpeed;
+    }
+
+
 }

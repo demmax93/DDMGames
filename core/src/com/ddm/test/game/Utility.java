@@ -47,8 +47,7 @@ public final class Utility {
             return;
         }
         if (filePathResolver.resolve(mapFilenamePath).exists()) {
-            assetManager.setLoader(
-                    TiledMap.class, new TmxMapLoader(filePathResolver));
+            assetManager.setLoader(TiledMap.class, new TmxMapLoader(filePathResolver));
             assetManager.load(mapFilenamePath, TiledMap.class);
             assetManager.finishLoadingAsset(mapFilenamePath);
             Gdx.app.debug(TAG, "Map loaded!: " + mapFilenamePath);

@@ -213,7 +213,8 @@ public class PlayerController implements InputProcessor {
             player.calculateNextPosition(Entity.Direction.RIGHT,delta);
             player.setState(Entity.State.WALKING);
             player.setDirection(Entity.Direction.RIGHT, delta);
-        } else if( keys.get(Keys.UP)){
+        }
+        if( keys.get(Keys.UP)){
             player.calculateNextPosition(Entity.Direction.UP, delta);
             player.setState(Entity.State.WALKING);
             player.setDirection(Entity.Direction.UP, delta);

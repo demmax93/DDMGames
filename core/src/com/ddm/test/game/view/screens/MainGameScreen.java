@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.ddm.test.game.MapManager;
@@ -39,6 +40,8 @@ public class MainGameScreen implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer = null;
     private OrthographicCamera camera = null;
     private static MapManager mapMgr;
+    public static final double TEEWS = 0.04; // opozdanie camery
+    TiledMapTileLayer layerMap ;
 
     public MainGameScreen() {
         mapMgr = new MapManager();
@@ -61,6 +64,7 @@ public class MainGameScreen implements Screen {
         currentPlayerSprite = player.getFrameSprite();
         controller = new PlayerController(player);
         Gdx.input.setInputProcessor(controller);
+        layerMap = (TiledMapTileLayer)mapMgr.getCurrentMap().getLayers().get(0);
     }
 
     @Override
@@ -71,8 +75,7 @@ public class MainGameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.position.set(currentPlayerSprite.getX(), currentPlayerSprite.getY(), 0f);
-        camera.update();
+        setCameraPosition();
         player.update(delta);
         currentPlayerFrame = player.getFrame();
         updatePortalLayerActivation(player.boundingBox);
@@ -85,6 +88,25 @@ public class MainGameScreen implements Screen {
         mapRenderer.getBatch().begin();
         mapRenderer.getBatch().draw(currentPlayerFrame, currentPlayerSprite.getX(), currentPlayerSprite.getY(), 1,1);
         mapRenderer.getBatch().end();
+    }
+
+    private void setCameraPosition(){
+        float x = (float) (camera.position.x +((currentPlayerSprite.getX() - camera.position.x) * TEEWS));
+        float y = (float) (camera.position.y +((currentPlayerSprite.getY() - camera.position.y) * TEEWS));
+        if(x < camera.viewportWidth/2) {
+            x = camera.viewportWidth/2;
+        }
+        if(y < camera.viewportHeight/2) {
+            y = camera.viewportHeight/2;
+        }
+        if(x > layerMap.getTileWidth() * layerMap.getWidth()/100 - camera.viewportWidth/2) {
+            x = layerMap.getTileWidth() * layerMap.getWidth()/100 - camera.viewportWidth/2;
+        }
+        if(y > layerMap.getTileHeight() * layerMap.getHeight()/100 - camera.viewportHeight/2) {
+            y = layerMap.getTileHeight() * layerMap.getHeight()/100 - camera.viewportHeight/2;
+        }
+        camera.position.set(x,y, 0);
+        camera.update();
     }
 
     @Override
